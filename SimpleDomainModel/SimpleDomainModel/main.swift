@@ -170,20 +170,35 @@ open class Person {
 //////////////////////////////////////
 //// Family
 ////
-//open class Family {
-//  fileprivate var members : [Person] = []
-//
-//  public init(spouse1: Person, spouse2: Person) {
-//  }
-//
-//  open func haveChild(_ child: Person) -> Bool {
-//  }
-//
-//  open func householdIncome() -> Int {
-//  }
-//}
-//
-//
-//
-//
-//
+open class Family {
+  fileprivate var members : [Person] = []
+
+  public init(spouse1: Person, spouse2: Person) {
+    spouse1._spouse = nil;
+    spouse2.spouse = nil;
+    spouse1._spouse = spouse2;
+    spouse2._spouse = spouse1;
+    members.append(spouse1);
+    members.append(spouse2);
+  }
+
+  open func haveChild(_ child: Person) -> Bool {
+    for person in members {
+        if person.age >= 21 {
+            members.append(child);
+            return true;
+        }
+    }
+    return false;
+  }
+
+  open func householdIncome() -> Int {
+    var totalIncome: Int = 0;
+    for person in members {
+        totalIncome += person.job?.calculateIncome(2000) ?? 0;
+    }
+    return totalIncome;
+  }
+    
+}
+
